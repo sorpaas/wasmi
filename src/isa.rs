@@ -68,7 +68,7 @@
 //!
 
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 
 /// Should we keep a value before "discarding" a stack frame?
 ///

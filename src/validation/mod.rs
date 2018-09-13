@@ -1,13 +1,13 @@
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 #[cfg(feature = "std")]
 use std::error;
 use core::fmt;
 
 #[cfg(feature = "std")]
-use std::collections::HashSet;
+use std::collections::{HashSet as Set};
 #[cfg(not(feature = "std"))]
-use hashmap_core::HashSet;
+use alloc::btree_set::{BTreeSet as Set};
 
 use parity_wasm::elements::{
 	BlockType, External, GlobalEntry, GlobalType, Internal, MemoryType, Module, Instruction,
@@ -288,9 +288,13 @@ pub fn validate_module(module: Module) -> Result<ValidatedModule, Error> {
 
 	// validate export section
 	if let Some(export_section) = module.export_section() {
-		let mut export_names = HashSet::with_capacity(export_section.entries().len());
+		#[cfg(feature = "std")]
+		let mut export_names = Set::with_capacity(export_section.entries().len());
+		#[cfg(not(feature = "std"))]
+		let mut export_names = Set::new();
+
 		for export in export_section.entries() {
-			// HashSet::insert returns false if item already in set.
+			// Set::insert returns false if item already in set.
 			let duplicate = export_names.insert(export.field()) == false;
 			if duplicate {
 				return Err(Error(

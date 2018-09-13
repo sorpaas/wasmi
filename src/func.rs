@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 use alloc::rc::{Rc, Weak};
 use core::fmt;
 use parity_wasm::elements::Local;

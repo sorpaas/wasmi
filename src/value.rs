@@ -117,6 +117,9 @@ pub trait Float<T>: ArithmeticOps<T> {
 	fn ceil(self) -> T;
 	/// Returns the integer part of a number.
 	fn trunc(self) -> T;
+	#[cfg(not(feature = "std"))]
+	/// Returns the fractional part of a number.
+	fn fract(self) -> T;
 	/// Returns the nearest integer to a number. Round half-way cases away from 0.0.
 	fn round(self) -> T;
 	/// Returns the nearest integer to a number. Ties are round to even number.
@@ -261,7 +264,7 @@ impl FromRuntimeValue for bool {
 }
 
 ///  This conversion assumes that `i8` is represented as an [`I32`].
-/// 
+///
 /// [`I32`]: enum.RuntimeValue.html#variant.I32
 impl FromRuntimeValue for i8 {
 	fn from_runtime_value(val: RuntimeValue) -> Option<Self> {
@@ -275,7 +278,7 @@ impl FromRuntimeValue for i8 {
 }
 
 ///  This conversion assumes that `i16` is represented as an [`I32`].
-/// 
+///
 /// [`I32`]: enum.RuntimeValue.html#variant.I32
 impl FromRuntimeValue for i16 {
 	fn from_runtime_value(val: RuntimeValue) -> Option<Self> {
@@ -289,7 +292,7 @@ impl FromRuntimeValue for i16 {
 }
 
 ///  This conversion assumes that `u8` is represented as an [`I32`].
-/// 
+///
 /// [`I32`]: enum.RuntimeValue.html#variant.I32
 impl FromRuntimeValue for u8 {
 	fn from_runtime_value(val: RuntimeValue) -> Option<Self> {
@@ -303,7 +306,7 @@ impl FromRuntimeValue for u8 {
 }
 
 ///  This conversion assumes that `u16` is represented as an [`I32`].
-/// 
+///
 /// [`I32`]: enum.RuntimeValue.html#variant.I32
 impl FromRuntimeValue for u16 {
 	fn from_runtime_value(val: RuntimeValue) -> Option<Self> {
@@ -766,6 +769,10 @@ macro_rules! impl_float {
 			}
 			fn round(self) -> $type {
 				$intermediate::round(self.into()).into()
+			}
+			#[cfg(not(feature = "std"))]
+			fn fract(self) -> $type {
+				self - self.trunc()
 			}
 			fn nearest(self) -> $type {
 				let round = self.round();

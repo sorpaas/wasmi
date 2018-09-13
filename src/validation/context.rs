@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 use parity_wasm::elements::{MemoryType, TableType, GlobalType, BlockType, ValueType, FunctionType};
 use validation::Error;
 

@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 use alloc::rc::Rc;
 use runner::check_function_args;
 use Trap;
@@ -7,9 +7,9 @@ use core::cell::RefCell;
 use core::fmt;
 
 #[cfg(feature = "std")]
-use std::collections::HashMap;
+use std::collections::{HashMap as Map};
 #[cfg(not(feature = "std"))]
-use hashmap_core::HashMap;
+use alloc::btree_map::{BTreeMap as Map};
 
 use parity_wasm::elements::{External, InitExpr, Internal, Instruction, ResizableLimits, Type};
 use {Module, Error, Signature, MemoryInstance, RuntimeValue, TableInstance};
@@ -161,7 +161,7 @@ pub struct ModuleInstance {
 	funcs: RefCell<Vec<FuncRef>>,
 	memories: RefCell<Vec<MemoryRef>>,
 	globals: RefCell<Vec<GlobalRef>>,
-	exports: RefCell<HashMap<String, ExternVal>>,
+	exports: RefCell<Map<String, ExternVal>>,
 }
 
 impl ModuleInstance {
@@ -172,7 +172,7 @@ impl ModuleInstance {
 			tables: RefCell::new(Vec::new()),
 			memories: RefCell::new(Vec::new()),
 			globals: RefCell::new(Vec::new()),
-			exports: RefCell::new(HashMap::new()),
+			exports: RefCell::new(Map::new()),
 		}
 	}
 

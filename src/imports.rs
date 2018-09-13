@@ -1,10 +1,10 @@
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 
 #[cfg(feature = "std")]
-use std::collections::HashMap;
+use std::collections::{HashMap as Map};
 #[cfg(not(feature = "std"))]
-use hashmap_core::HashMap;
+use alloc::btree_map::{BTreeMap as Map};
 
 use global::GlobalRef;
 use memory::MemoryRef;
@@ -108,7 +108,7 @@ pub trait ImportResolver {
 /// [`ImportResolver`]: trait.ImportResolver.html
 /// [`ModuleImportResolver`]: trait.ModuleImportResolver.html
 pub struct ImportsBuilder<'a> {
-	modules: HashMap<String, &'a ModuleImportResolver>,
+	modules: Map<String, &'a ModuleImportResolver>,
 }
 
 impl<'a> Default for ImportsBuilder<'a> {
@@ -120,7 +120,7 @@ impl<'a> Default for ImportsBuilder<'a> {
 impl<'a> ImportsBuilder<'a> {
 	/// Create an empty `ImportsBuilder`.
 	pub fn new() -> ImportsBuilder<'a> {
-		ImportsBuilder { modules: HashMap::new() }
+		ImportsBuilder { modules: Map::new() }
 	}
 
 	/// Register an resolver by a name.

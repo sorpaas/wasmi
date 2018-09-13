@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 use core::u32;
 use parity_wasm::elements::{Instruction, BlockType, ValueType, TableElementType, Func, FuncBody};
 use common::{DEFAULT_MEMORY_INDEX, DEFAULT_TABLE_INDEX};

@@ -100,6 +100,7 @@
 
 //// alloc is required in no_std
 #![cfg_attr(not(feature = "std"), feature(alloc))]
+#![cfg_attr(not(feature = "std"), feature(slice_concat_ext))]
 
 #[cfg(not(feature = "std"))]
 #[macro_use]
@@ -119,14 +120,12 @@ extern crate assert_matches;
 
 extern crate parity_wasm;
 extern crate byteorder;
-#[cfg(not(feature = "std"))]
-extern crate hashmap_core;
 extern crate memory_units as memory_units_crate;
 
 pub extern crate nan_preserving_float;
 
 #[allow(unused_imports)]
-use alloc::prelude::*;
+use alloc::{borrow::ToOwned, boxed::Box, slice::SliceConcatExt, string::{String, ToString}, vec::Vec};
 use core::fmt;
 #[cfg(feature = "std")]
 use std::error;
